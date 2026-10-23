@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mt-4">
+
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3">
+                <h5>Total Products</h5>
+                <h2>@ViewBag.TotalProducts</h2>
+                <a asp-controller="Product" asp-action="Index">
+                    View Products
+                </a>
+            </div>
+        </div>
+        @if (User.IsInRole("Admin"))
+{
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3">
+                <h5>Categories</h5>
+                <h2>@ViewBag.TotalCategories</h2>
+                <a asp-controller="Category" asp-action="Index">
+                    View Categories
+                </a>
+            </div>
+        </div>
+}
+@if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3">
+                    <h5>Suppliers</h5>
+                    <h2>@ViewBag.TotalSuppliers</h2>
+                    <a asp-controller="Supplier" asp-action="Index">
+                        View Suppliers
+                    </a>
+                </div>
+            </div>
+        }
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3">
+                <h5>Low Stock</h5>
+                <h2>@ViewBag.LowStockProducts</h2>
+                <a asp-controller="Product" asp-action="Index">
+                    Check Products
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

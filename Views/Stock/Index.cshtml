@@ -1,0 +1,56 @@
+﻿
+@model IEnumerable<InventoryManagement.Models.StockTransaction>
+
+@{
+    ViewData["Title"] = "Stock History";
+}
+
+<h2>Stock Transaction History</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">
+    New Stock Transaction
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Type</th>
+            <th>Quantity</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.TransactionDate.ToLocalTime()
+                        .ToString("dd-MM-yyyy HH:mm")
+                </td>
+                <td>@item.Product.Name</td>
+                <td>
+                    @if (item.TransactionType ==
+                        InventoryManagement.Models.StockTransactionType.StockIn)
+                    {
+                        <span class="badge bg-success">Stock In</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Stock Out</span>
+                    }
+                </td>
+                <td>@item.Quantity</td>
+                <td>@item.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>

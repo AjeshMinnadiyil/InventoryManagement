@@ -1,0 +1,33 @@
+﻿
+@model InventoryManagement.Models.Supplier
+
+@{
+    ViewData["Title"] = "Supplier Details";
+}
+
+<h2>Supplier Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">ID</dt>
+    <dd class="col-sm-9">@Model.SupplierId</dd>
+
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">@Model.Phone</dd>
+
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+
+    <dt class="col-sm-3">Address</dt>
+    <dd class="col-sm-9">@Model.Address</dd>
+</dl>
+
+<a asp-action="Edit"
+   asp-route-id="@Model.SupplierId"
+   class="btn btn-warning">Edit</a>
+
+<a asp-action="Index" class="btn btn-secondary">
+    Back to List
+</a>

@@ -1,0 +1,55 @@
+﻿
+@model IEnumerable<InventoryManagement.Models.Supplier>
+
+@{
+    ViewData["Title"] = "Suppliers";
+}
+
+<h2>Suppliers</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">
+    Add Supplier
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SupplierId</td>
+                <td>@item.Name</td>
+                <td>@item.Phone</td>
+                <td>@item.Email</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@item.SupplierId"
+                       class="btn btn-info btn-sm">Details</a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@item.SupplierId"
+                       class="btn btn-warning btn-sm">Edit</a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.SupplierId"
+                       class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

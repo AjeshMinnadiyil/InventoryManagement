@@ -1,0 +1,176 @@
+﻿
+@model IEnumerable<InventoryManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Products</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-primary mb-3">
+        Add Product
+    </a>
+}
+
+<form asp-controller="Product"
+      asp-action="Index"
+      method="get"
+      class="row g-2 mb-4">
+
+    <div class="col-md-5">
+        <input type="text"
+               name="searchString"
+               value="@ViewBag.SearchString"
+               class="form-control"
+               placeholder="Search product name or SKU" />
+    </div>
+
+    <div class="col-md-4">
+        <select name="categoryId" class="form-select">
+            <option value="">All Categories</option>
+
+            @foreach (var category in ViewBag.Categories)
+            {
+                if (ViewBag.CategoryId != null &&
+                    (int)ViewBag.CategoryId == category.CategoryId)
+                {
+                    <option value="@category.CategoryId" selected>
+                        @category.Name
+                    </option>
+                }
+                else
+                {
+                    <option value="@category.CategoryId">
+                        @category.Name
+                    </option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">
+            Search / Filter
+        </button>
+
+        <a asp-controller="Product"
+           asp-action="Index"
+           class="btn btn-secondary">
+            Reset
+        </a>
+    </div>
+</form>
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>SKU</th>
+            <th>Category</th>
+            <th>Supplier</th>
+            <th>Price</th> 
+            <th>Quantity</th>
+            @if (User.IsInRole("Admin"))
+{
+            <th>Actions</th>
+}
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.SKU</td>
+                <td>@item.Category.Name</td>
+                <td>@item.Supplier.Name</td>
+                <td>@item.Price.ToString("N2")</td>
+                <td>
+                    @item.Quantity
+
+                    @if (item.Quantity <= item.ReorderLevel)
+                    {
+                        <span class="badge bg-danger">
+                            Low Stock
+                        </span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-info btn-sm">Details</a>
+                          @if (User.IsInRole("Admin"))
+    {
+                    <a asp-action="Edit"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-warning btn-sm">Edit</a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-danger btn-sm">Delete</a>
+    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@if (ViewBag.TotalPages > 0)
+{
+    <nav class="mt-4">
+        <ul class="pagination">
+
+            <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage - 1)"
+                   asp-route-searchString="@ViewBag.SearchString"
+                   asp-route-categoryId="@ViewBag.CategoryId">
+                    Previous
+                </a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-searchString="@ViewBag.SearchString"
+                       asp-route-categoryId="@ViewBag.CategoryId">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage + 1)"
+                   asp-route-searchString="@ViewBag.SearchString"
+                   asp-route-categoryId="@ViewBag.CategoryId">
+                    Next
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}
+
